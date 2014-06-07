@@ -23,6 +23,10 @@ extern "C"{
 #ifndef __XS_AIO_H__
 #define __XS_AIO_H__
 
+/*
+ * aio do not close socket
+ * */
+
 typedef struct xs_aio_t
 {
     int             fd;

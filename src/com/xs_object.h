@@ -26,7 +26,7 @@ extern "C"{
 struct xs_ctrl_t;
 typedef xs_hash_t xs_object_t;
 
-typedef void (*xs_object_handler_t)(void* model, int fd, struct xs_ctrl_t* ctrl);
+typedef void (*xs_object_handler_t)(xs_model_t* model, int fd, struct xs_ctrl_t* ctrl);
 
 static inline xs_object_t* xs_object_create()
 {

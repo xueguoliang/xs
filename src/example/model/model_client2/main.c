@@ -10,6 +10,9 @@ void model_send_cb(xs_model_t* model, void* ptr, int result)
 
 int main(int argc, char** argv)
 {
+    argc = argc;
+    argv = argv;
+#if 0
     xs_server_init(4, NULL, argc, argv);
 
     int fd = xs_sock_connect(29999, "127.0.0.1");
@@ -21,5 +24,6 @@ int main(int argc, char** argv)
     close(fd);
 
     xs_server_run();
+#endif
     return 0;
 }

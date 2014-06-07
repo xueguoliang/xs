@@ -21,7 +21,6 @@
 extern "C"{
 #endif
 #include "xs.h"
-
 void xs_ctrl_accept(xs_ev_sock_t* ev)
 {
     int fd;
@@ -90,9 +89,10 @@ void xs_ctrl_recv_df(int fd, xs_ctrl_t* ctrl)
 
 void xs_ctrl_handle_df(int fd, char* buf, int size, xs_ctrl_t* ctrl)
 {
+    size = size;
     xs_model_t* model;
     xs_logd("recv buf=%s", buf);
-    model = xs_model_from_buf(buf, size); /* 0`clis`1`init`argc`2 */ 
+    model = xs_model_from_buf(buf); /* 0`clis`1`init`argc`2 */ 
     xs_object_t* obj = xs_hash_find(ctrl->objs, model->argv[0]);
     
     if(obj)
@@ -104,6 +104,7 @@ void xs_ctrl_handle_df(int fd, char* buf, int size, xs_ctrl_t* ctrl)
         }
         else
         {
+            // bad guy
             xs_loge("can not find operation %s", model->argv[1]);
             xs_close_socket(fd);
         }
@@ -146,6 +147,53 @@ int xs_ctrl_send_block_ip(xs_ctrl_t* ctrl, char* ip, char* buf, int size)
     if(ret != fd)
         xs_close_socket(fd);
     return ret;
+}
+int xs_ctrl_send_block(xs_ctrl_t* ctrl, int fd, char* buf, int size)
+{
+    int ret;
+    ret = xs_sock_send_block(fd, buf, size, ctrl->timeout);
+    if(ret == size)
+        return fd;
+    return -1;
+}
+
+char* xs_ctrl_recv_block(xs_ctrl_t* ctrl, int fd, int* size)
+{
+    int head;
+    int ret;
+    char* buf;
+    ret = xs_sock_recv_block(fd, (char*)&head, sizeof(head), ctrl->timeout);    
+    if(ret != sizeof(head))
+        return NULL;
+    head = ntohl(head);
+
+    buf = (char*)xs_malloc(head+1);
+    buf[head] = 0;
+    ret = xs_sock_recv_block(fd, buf, head, ctrl->timeout);
+    if(ret != head)
+    {
+        xs_free(buf);
+        return NULL;
+    }
+
+    *size = head;
+
+    return buf;
+}
+
+char* xs_ctrl_recv_block_ip(xs_ctrl_t* ctrl, char* ip, int* size)
+{
+    int fd = xs_sock_connect(ctrl->port, ip);
+    if(fd < 0)
+    {
+        return NULL;
+    }
+    char* buf = xs_ctrl_recv_block(ctrl, fd, size);
+    if(!buf)
+    {
+        xs_close_socket(fd);
+    }
+    return buf;
 }
 
 #ifdef __cplusplus

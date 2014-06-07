@@ -36,7 +36,7 @@ void model_recv_cbk(xs_model_t* model, void* ptr, int result)
     {
         xs_logd("model_%d=%s", i, model->argv[i]);
     }
-    xs_model_delete(model);
+    //xs_model_delete(model);
 }
 
 void myaccept(xs_ev_sock_t* sock)
@@ -44,7 +44,7 @@ void myaccept(xs_ev_sock_t* sock)
     int fd;
     while((fd=accept(sock->fd, NULL, NULL)) > 0)
     {
-        xs_model_recv(fd, model_recv_cbk, NULL);
+        //xs_model_recv(fd, model_recv_cbk, NULL);
         //xs_model_recv(fd, model_recv_cb);
     }
 
@@ -56,11 +56,13 @@ void myaccept(xs_ev_sock_t* sock)
 
 int main(int argc, char** argv)
 {
+    argc = argc; argv = argv;
+#if 0
     xs_server_init(4, NULL, argc, argv);
 
     xs_server_start_tcp(29999, 10, myaccept, NULL);
 
     xs_server_run();
-
+#endif
     return 0;
 }

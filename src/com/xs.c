@@ -20,7 +20,6 @@
 extern "C"{
 #endif
 #include "xs.h"
-
 pthread_key_t g_thread_key;
 xs_mempool_t* g_mp;
 

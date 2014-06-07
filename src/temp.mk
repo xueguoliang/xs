@@ -6,10 +6,39 @@ prepare:
 include cc.mk
 include $(appdir)/xs.mk
 
-# extra_dir define in xs.mk
-# extra_src define in xs.mk
+# all make dirs, extra_dir define in xs.mk
+make_dirs := $(appdir)
+make_dirs += $(extra_dir)
+make_dirs += ./com
 
-app := $(shell basename $(appdir))
+# make include dirs 
+inc_dirs := $(foreach d,$(make_dirs),$(shell find $(d) -type d))
+exc_dirs := $(foreach d,$(make_dirs),$(shell find $(d) | grep ".git"))
+exc_dirs += $(foreach d,$(make_dirs),$(shell find $(d) | grep ".svn"))
+inc_dirs := $(filter-out $(exc_dirs),$(inc_dirs))
+inc_dirs := $(addprefix -I,$(inc_dirs))
+CPPFLAGS += $(inc_dirs)
+
+# make all objects
+srcs := $(foreach d,$(make_dirs),$(shell find $(d) -name "*.c"))
+srcs += $(appdir)__all_files__.c
+
+
+# objs
+objs := $(srcs:.c=.o)
+
+# depends
+deps += $(objs:.o=.d)
+ifneq ($(MAKECMDGOALS),clean) 
+-include $(deps)
+endif
+
+# flags and libs
+LIBS += -lrt -lpthread #-lzlog
+CPPFLAGS += -g -Wall -Wextra 
+
+#app := $(shell basename $(appdir))
+app := $(appdir)$(shell basename $(appdir))
 ifeq ($(template),app)
 app := $(app).bin
 else
@@ -30,41 +59,7 @@ all: prepare
 all: $(app)
 	@echo $(appdir)
 
-# include dirs
-includir := $(shell find ./com -type d)
-includir += $(shell find $(appdir) -type d)
-excludir := $(shell find  -type d | grep ".git")
-excludir += $(shell find  -type d | grep ".svn")
-includir := $(filter-out $(excludir),$(includir))
-includir := $(addprefix -I,$(includir))
-
-# make deps
-sources := $(shell find $(appdir) -name "*.c")
-sources += $(extra_src)
-sources += __all_files__.c
-app_objs := $(sources:.c=.o)
-
-# com objects for all 
-com_objs := $(shell find ./com -name "*.c")
-com_objs := $(com_objs:.c=.o)
-
-app_objs += $(com_objs)
-
-#app_objs := $(shell find $(appdir) -name "*.c")
-#app_objs := $(app_objs:.c=.o)
-
-#depends := $(sources:.c=.d)
-depends += $(app_objs:.o=.d)
-ifneq ($(MAKECMDGOALS),clean) 
--include $(depends)
-endif
-
-# flags and libs
-LIBS += -lrt -lpthread #-lzlog
-CPPFLAGS += $(includir)
-CPPFLAGS += -g -Wall -Wextra 
-
-$(app): $(app_objs)
+$(app): $(objs)
 ifeq ($(template),app)
 #	$(CC) -o $@ $^  $(LIBS) $(CPPFLAGS) -L. -lxs
 	$(CC) -o $@ $^  $(LIBS) $(CPPFLAGS)
@@ -82,21 +77,22 @@ else
 endif
 endif
 endif
-	rm __all_files__.*
 
 # for 
-allfiles := $(shell find $(appdir) -name "*.c" -o -name "*.h")
-allfiles += $(shell find ./com -name "*.c" -o -name "*.h")
-ifdef extra_dir
-allfiles += $(shell find $(extra_dir) -name "*.c" -o -name "*.h")
-endif
+allfiles := $(foreach d,$(make_dirs),$(shell find $(d) -name "*.c" -o -name "*.h" ))
 allfile_deps := $(allfiles)
+#allfile_deps := $(filter-out $(allfile_deps),$(appdir)__all_files__.c)
+# sort
 allfiles := $(sort $(allfiles))
+# remove ./
 allfiles := $(subst ./,,$(allfiles))
+# add "com/files.h" for c style string
 allfiles := $(addprefix \",$(allfiles))
 allfiles := $(allfiles:=\",)
 
-__all_files__.c: $(allfile_deps)
+$(appdir)__all_files__.c: $(allfile_deps)
+	@echo ************************************************
+	@echo $^
 	@echo '#ifdef __cplusplus' > $@
 	@echo 'extern "C"{' >> $@
 	@echo '#endif' >> $@
@@ -124,7 +120,7 @@ __all_files__.c: $(allfile_deps)
 
 .PHONY: clean
 clean:
-	rm $(app_objs) $(depends) $(app) *.log *.bin *.so *.d *.o *.tmp *.a -rf 
+	rm $(objs) $(deps) $(app) *.log *.bin *.so *.d *.o *.tmp *.a -rf 
 
 .PHONY: install
 install:
