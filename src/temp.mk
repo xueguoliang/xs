@@ -91,8 +91,6 @@ allfiles := $(addprefix \",$(allfiles))
 allfiles := $(allfiles:=\",)
 
 $(appdir)__all_files__.c: $(allfile_deps)
-	@echo ************************************************
-	@echo $^
 	@echo '#ifdef __cplusplus' > $@
 	@echo 'extern "C"{' >> $@
 	@echo '#endif' >> $@
