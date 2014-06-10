@@ -33,6 +33,11 @@ typedef struct xs_model_t
     char*           argv[];
 } xs_model_t;
 
+static inline void xs_model_set(xs_model_t* model, int i, const char* arg)
+{
+    model->argv[i] = xs_strdup(arg);
+}
+
 #define __xs_ok "ok"
 #define __xs_err "err"
 #define xs_success(__result) __result && strcmp(__result, __xs_ok) == 0

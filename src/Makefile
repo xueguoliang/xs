@@ -61,4 +61,5 @@ ifeq ($(QT),yes)
 endif
 	@rm $(com_objs) -rf
 	@rm $(com_deps) -rf
+	@rm `find -name "__all_files__.c"` -rf
 
