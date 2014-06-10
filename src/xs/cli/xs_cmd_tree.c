@@ -105,7 +105,7 @@ char* xs_cmd_resolv(char* cmd1, int* size)
     xs_cmd_tree_node_t* cmd_node;
 
     int index=0;
-    xs_model_t* model = xs_model_alloc(256);
+    xs_model_t* model = xs_model_create(256);
         
     while(c)
     {
@@ -117,6 +117,7 @@ char* xs_cmd_resolv(char* cmd1, int* size)
         }
         parent = node;
         cmd_node = xs_entry(parent, xs_cmd_tree_node_t, node);
+        
         xs_model_set(model, index++, c);
 
         c = strtok_r(NULL, " \t\n", &sptrc);
@@ -176,3 +177,4 @@ void xs_cmd_clear()
     if(g_cmd_tree.root)
         xs_cmd_tree_del(g_cmd_tree.root);    
 }
+

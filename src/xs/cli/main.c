@@ -39,9 +39,9 @@ int main(int argc, char* argv[])
         if(buf)
         {
             fd = xs_sock_connect(port, ip);
-            xs_sock_send_block(fd, buf, size, XS_CLIS_TIMEOUT);
+            xs_sock_send_block(fd, buf, size, 60000);
             xs_free(buf);
-            xs_model_recv_block((void**)&rsp, fd, XS_CLIS_TIMEOUT);
+            xs_model_recv_block(&rsp, fd, 60000);
             xs_close_socket(fd);
 
             printf("%s\n", rsp->argv[0]);
