@@ -129,6 +129,10 @@ void __xs_aio_send_data(xs_ev_sock_t* sev)
             aio->ret = ret;
             aio->func(aio);
         }
+        else
+        {
+            xs_ev_add(sev->ev);
+        }
     }
     else if(ret < 0 && errno == EAGAIN)
     {
@@ -203,6 +207,10 @@ void __xs_aio_send_data_no_header(xs_ev_sock_t* sev)
             aio->result = XS_AIO_DONE;
             aio->ret = ret;
             aio->func(aio);
+        }
+        else
+        {
+            xs_ev_add(sev->ev);
         }
     }
     else if(ret < 0 && errno == EAGAIN)
