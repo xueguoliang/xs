@@ -43,14 +43,13 @@ void xs_ctrl_accept(xs_ev_sock_t* ev)
     }
 }
 
-xs_ctrl_t* xs_ctrl_create(uint16_t port, int timeout, 
+xs_ctrl_t* xs_ctrl_create(uint16_t port, 
         xs_ctrl_recv_t r, xs_ctrl_handle_t h)
 {
     xs_ctrl_t* ctrl = xs_malloc(sizeof(*ctrl));
 
     ctrl->objs = xs_hash_create();
     ctrl->port = port;
-    ctrl->timeout = timeout;
     ctrl->server = NULL;
     if(r == NULL)
         r = xs_ctrl_recv_df;
@@ -132,6 +131,7 @@ void xs_ctrl_destroy(xs_ctrl_t* ctrl)
     xs_free(ctrl);
 }
 
+#if 0
 int xs_ctrl_send_block_ip(xs_ctrl_t* ctrl, char* ip, char* buf, int size)
 {
     int fd;
@@ -195,6 +195,7 @@ char* xs_ctrl_recv_block_ip(xs_ctrl_t* ctrl, char* ip, int* size)
     }
     return buf;
 }
+#endif
 
 #ifdef __cplusplus
 }

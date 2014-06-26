@@ -33,7 +33,8 @@ xs_model_t* xs_model_from_buf(char* buf)
         p = strtok_r(NULL, "|", &saveptr);
     }
 
-    xs_model_t* model = xs_malloc(sizeof(int)+sizeof(char*)*vec->count);
+    xs_logd("***************8vec->count=%d", vec->count);
+    xs_model_t* model = xs_model_create(vec->count);
     model->argc = vec->count;
     int i;
     for(i=0; i<model->argc; ++i)
@@ -79,8 +80,11 @@ char* xs_model_to_buf(xs_model_t* model, int* olen)
     for(i=0; i<model->argc; ++i)
     {
         len += strlen(model->argv[i]); 
+        ++len;
     }
-    char* buf = xs_malloc(len);
+    xs_logd("****************len is %d", len);
+    char* buf = xs_malloc(len+1);
+    buf[len] = 0;
 
     len = 0;
     for(i=0; i<model->argc; ++i)

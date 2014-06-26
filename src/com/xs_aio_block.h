@@ -20,43 +20,15 @@
 #ifdef __cplusplus
 extern "C"{
 #endif
-#ifndef __XS_MODEL_H__
-#define __XS_MODEL_H__
+#ifndef __XS_AIO_BLOCK_H__
+#define __XS_AIO_BLOCK_H__
 
-/*
- * model do not close socket too, same with aio
+/* 
+ * the buffer in send
  * */
+int xs_aio_send_block(int fd, const char* buf, int size, int timeout);
+int xs_aio_recv_block(int fd, char** buf, int* size, int timeout);
 
-typedef struct xs_model_t
-{
-    intptr_t        argc;
-    char*           argv[];
-} xs_model_t;
-
-static inline void xs_model_set(xs_model_t* model, int i, const char* arg)
-{
-    model->argv[i] = xs_strdup(arg);
-}
-
-#define __xs_ok "ok"
-#define __xs_err "err"
-#define xs_success(__result) __result && strcmp(__result, __xs_ok) == 0
-
-typedef struct xs_model_cb_t
-{
-    xs_model_t* model;
-    xs_aio_t* aio;
-    void* ptr;
-    void(*func)(struct xs_model_cb_t*);
-} xs_model_cb_t;
-
-typedef void(*xs_model_cbk_t)(xs_model_cb_t* cb);
-
-xs_model_t* xs_model_from_buf(char* buf);
-char* xs_model_to_buf(xs_model_t* model, int* olen);
-
-void xs_model_recv(int fd, xs_model_cbk_t cbk, void* ptr);
-void xs_model_send(int fd, xs_model_cbk_t cbk, void* ptr, xs_model_t* model);
 
 #endif
 #ifdef __cplusplus

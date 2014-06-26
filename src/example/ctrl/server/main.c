@@ -15,7 +15,7 @@ void handler_test(xs_model_t* model, int fd, struct xs_ctrl_t* ctrl)
 int main(int argc, char** argv)
 {
     xs_server_init(4, NULL, argc, argv);
-    xs_ctrl_t* ctrl = xs_ctrl_create(8999, 60000, NULL, NULL);
+    xs_ctrl_t* ctrl = xs_ctrl_create(8999, NULL, NULL);
     xs_ctrl_reg_handler(ctrl, "test", "test", handler_test);
     return xs_server_run();
 }

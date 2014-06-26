@@ -19,47 +19,35 @@
 #ifdef __cplusplus
 extern "C"{
 #endif
+#include "xs.h"
 
+int xs_aio_send_block(int fd, const char* buf, int size, int timeout)
+{
+    int ret;
+    size = htonl(size);
+    ret = xs_sock_send_block(fd, &size, 4, timeout);
+    if(ret == 4)
+    {
+        size = ntohl(size);
+        ret = xs_sock_send_block(fd, buf, size, timeout);
+    }
 
+    return ret;
+}
 
-#ifndef __XS_H__
-#define __XS_H__
-
-#include "xs_net.h"
-#include "xs_def.h"
-#include "xs_util.h"
-#include "xs_log.h"
-#include "xs_base64.h"
-#include "xs_atomic.h"
-#include "xs_list.h"
-#include "xs_mempool.h"
-#include "xs_malloc.h"
-#include "xs_heap.h"
-#include "xs_sort.h"
-#include "xs_rbtree.h"
-#include "xs_popen.h"
-#include "xs_stat.h"
-#include "xs_itoa.h"
-#include "xs_dict.h"
-#include "xs_config.h"
-#include "xs_tree.h"
-#include "xs_ev.h"
-#include "xs_sock.h"
-#include "xs_aio.h"
-#include "xs_aio_block.h"
-#include "xs_hash.h"
-#include "xs_model.h"
-#include "xs_model_block.h"
-#include "xs_object.h"
-#include "xs_ctrl.h"
-#include "xs_server.h"
-#include "xs_vec.h"
-#include "xs_md5.h"
-
-void xs_init();
-void xs_fini();
-
-#endif
+int xs_aio_recv_block(int fd, char** buf, int* size, int timeout)
+{
+    int ret;
+    ret = xs_sock_recv_block(fd, size, 4, timeout);
+    if(ret == 4)
+    {
+        *size = ntohl(*size);
+        *buf = malloc(*size + 1);
+        (*buf)[*size] = 0;
+        ret = xs_sock_recv_block(fd, *buf, *size, timeout);
+    }
+    return ret;
+}
 
 #ifdef __cplusplus
 }

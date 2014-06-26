@@ -31,6 +31,7 @@ extern "C"{
 typedef void (*xs_ctrl_recv_t)(int, struct xs_ctrl_t*);
 typedef void (*xs_ctrl_handle_t)(int, char*, int, struct xs_ctrl_t*);
 
+/* recv and handle can be temp modify */
 typedef struct xs_ctrl_t
 {
     xs_hash_t*          objs;
@@ -38,18 +39,19 @@ typedef struct xs_ctrl_t
     xs_ctrl_recv_t      r;
     xs_ctrl_handle_t    h;
     uint16_t            port;
-    int                 timeout;
 } xs_ctrl_t;
 
-xs_ctrl_t* xs_ctrl_create(uint16_t port, int timeout, xs_ctrl_recv_t r, 
+xs_ctrl_t* xs_ctrl_create(uint16_t port, xs_ctrl_recv_t r, 
         xs_ctrl_handle_t h);
 void xs_ctrl_destroy(xs_ctrl_t* ctrl);
 
+#if 0
 int xs_ctrl_send_block_ip(xs_ctrl_t* ctrl, char* ip, char* buf, int size);
 int xs_ctrl_send_block(xs_ctrl_t* ctrl, int fd, char* buf, int size);
 
 char* xs_ctrl_recv_block(xs_ctrl_t* ctrl, int fd, int* size);
 char* xs_ctrl_recv_block_ip(xs_ctrl_t* ctrl, char* ip, int* size);
+#endif
 
 // here
 void xs_ctrl_recv_df(int fd, xs_ctrl_t* ctrl);

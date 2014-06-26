@@ -27,6 +27,7 @@ int xs_model_send_block(xs_model_t* model, int fd, int timeout)
     int len;
     buf = xs_model_to_buf(model, &len); 
 
+#if 0
     int slen = htonl(len);
     int ret = xs_sock_send_block(fd, &slen, 4, timeout);
     if(ret == 4)
@@ -35,10 +36,17 @@ int xs_model_send_block(xs_model_t* model, int fd, int timeout)
         if(ret == len) return 0;
     }
     return -1;
+#endif
+    int ret = xs_aio_send_block(fd, buf, len, timeout);
+    xs_free(buf);
+
+    if(ret == len) return 0;
+    return -1;
 }
 
 int xs_model_recv_block(xs_model_t** model, int fd, int timeout)
 {
+#if 0
     int len;
     int ret = xs_sock_recv_block(fd, &len, 4, timeout);
     if(ret != 4)
@@ -54,6 +62,17 @@ int xs_model_recv_block(xs_model_t** model, int fd, int timeout)
 
     *model = xs_model_from_buf(buf);
     xs_free(buf);
+#endif
+    char *buf; int len;
+    int ret = xs_aio_recv_block(fd, &buf, &len, timeout);
+    if(ret != len)
+    {
+        return -1;
+    }
+
+    *model = xs_model_from_buf(buf);
+    xs_free(buf);
+
     return 0;
 }
 
