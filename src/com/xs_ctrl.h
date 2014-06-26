@@ -49,7 +49,6 @@ int xs_ctrl_send_block_ip(xs_ctrl_t* ctrl, char* ip, char* buf, int size);
 int xs_ctrl_send_block(xs_ctrl_t* ctrl, int fd, char* buf, int size);
 
 char* xs_ctrl_recv_block(xs_ctrl_t* ctrl, int fd, int* size);
-
 char* xs_ctrl_recv_block_ip(xs_ctrl_t* ctrl, char* ip, int* size);
 
 // here
