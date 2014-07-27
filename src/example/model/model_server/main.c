@@ -31,7 +31,7 @@ void model_recv_cbk(xs_model_t* model, void* ptr, int result)
     int i;
     ptr = ptr;
     result = result;
-    xs_logd("model_count=%d", model->argc);
+    xs_logd("model_count=%d", (int)model->argc);
     for(i=0; i<model->argc; ++i)
     {
         xs_logd("model_%d=%s", i, model->argv[i]);
