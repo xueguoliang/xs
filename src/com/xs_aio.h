@@ -45,10 +45,15 @@ typedef struct xs_aio_t
 void xs_aio_recv(int fd, void(*func)(xs_aio_t*), void* ptr);
 void xs_aio_send_with_header(int fd, void(*func)(xs_aio_t*), char* buf, int len, void* ptr);
 void xs_aio_send_no_header(int fd, void(*func)(xs_aio_t*), char* buf, int len, void* ptr);
+
 void _xs_aio_wait_close(xs_aio_t* aio);
-static inline void xs_aio_send_and_close(int fd, char* buf, int len)
+static inline void xs_aio_send_with_header_and_close(int fd, char* buf, int len)
 {
     xs_aio_send_with_header(fd, _xs_aio_wait_close, buf, len, NULL);
+}
+static inline void xs_aio_send_no_header_and_close(int fd, char* buf, int len)
+{
+    xs_aio_send_no_header(fd, _xs_aio_wait_close, buf, len, NULL);
 }
 
 #define xs_aio_free(__aio) do{ if(!__aio)break;\

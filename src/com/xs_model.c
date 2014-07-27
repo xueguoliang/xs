@@ -116,6 +116,14 @@ void xs_model_send(int fd, xs_model_cbk_t cbk, void* ptr, xs_model_t* model)
     cb->aio = NULL;
     xs_aio_send_no_header(fd, xs_model_aio_send_done, buf, len, cb);
 }
+void xs_model_send_and_close(int fd, xs_model_t *model)
+{
+    int len;
+    char* buf = xs_model_to_buf(model, &len);
+    xs_model_cb_t* cb = xs_malloc(sizeof(*cb));
+
+    xs_aio_send_no_header_and_close(fd, buf, len);
+}
 
 #ifdef __cplusplus
 }

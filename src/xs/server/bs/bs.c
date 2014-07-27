@@ -1,0 +1,3 @@
+
+void server_init()
+{}

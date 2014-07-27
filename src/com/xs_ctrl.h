@@ -61,18 +61,30 @@ void xs_ctrl_handle_df(int fd, char* buf, int size, xs_ctrl_t* ctrl);
     xs_hash_add(ctrl->objs, objname, obj)
 static inline void xs_ctrl_reg_handler(xs_ctrl_t* ctrl, char* objname, char* opname, xs_object_handler_t op)
 {
+
     xs_object_t* obj = (xs_object_t*)xs_hash_find(ctrl->objs, objname);
+
     if(obj == NULL)
     {
         obj = xs_object_create();
         xs_ctrl_reg_obj(ctrl, objname, obj);
     }
 
+    xs_hash_print(obj);
     if(xs_object_add_op(obj, opname, op) < 0)
     {
         /* add fail */
         xs_hash_del(obj, (char*)opname, NULL);
         xs_object_add_op(obj, opname, op);
+
+        xs_logd("add object failure:%s, %s", objname, opname);
+        xs_hash_print(obj);
+        exit(0);
+    }
+    else
+    {
+        xs_logd("add object ok:%s, %s", objname, opname);
+        xs_hash_print(obj);
     }
 }
 #endif

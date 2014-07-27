@@ -71,6 +71,7 @@ static inline int _xs_hash_cmpi(const struct rb_node* pos, const void* ptr)
 static inline int _xs_hash_cmp(const struct rb_node* pos, const void* ptr)
 {
     xs_hash_node_t* node = xs_entry(pos, xs_hash_node_t, node);
+    xs_logd("node is %s, key is %s", node->key.s, (char*)ptr);
     return strcmp(node->key.s, (char*)ptr);
 }
 
@@ -167,6 +168,16 @@ static inline xs_hash_node_t* xs_hash_next(xs_hash_node_t* prev)
     return NULL;
 }
 
+static inline void xs_hash_print(xs_hash_t* hash)
+{
+    xs_hash_node_t* node = xs_hash_first(hash);
+    while(node)
+    {
+        printf("%s ", node->key.s);
+        node = xs_hash_next(node);
+    }
+    printf("\n");
+}
 #endif
 #ifdef __cplusplus
 }

@@ -3,16 +3,19 @@
 
 void login(xs_model_t* model, int fd, struct xs_ctrl_t* ctrl)
 {
+    model = model;
     xs_logd("login is called");
     ctrl->r(fd, ctrl);
 }
 void logout(xs_model_t* model, int fd, struct xs_ctrl_t* ctrl)
 {
+    model = model;
     xs_logd("logout is called");
     ctrl->r(fd, ctrl);
 }
 void reg(xs_model_t* model, int fd, struct xs_ctrl_t* ctrl)
 {
+    model = model;
     xs_logd("reg is called");
     ctrl->r(fd, ctrl);
 }

@@ -57,6 +57,7 @@ char* xs_model_to_buf(xs_model_t* model, int* olen);
 
 void xs_model_recv(int fd, xs_model_cbk_t cbk, void* ptr);
 void xs_model_send(int fd, xs_model_cbk_t cbk, void* ptr, xs_model_t* model);
+void xs_model_send_and_close(int fd, xs_model_t* model);
 
 #endif
 #ifdef __cplusplus

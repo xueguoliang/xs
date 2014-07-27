@@ -129,7 +129,7 @@ char* xs_cmd_resolv(char* cmd1, int* size)
     {
         xs_logd("%s", model->argv[index]);
     }
-    xs_logd("index=%d", model->argc);
+    xs_logd("index=%d", (int)model->argc);
     // debug end
 
     cmd_node = xs_entry(parent, xs_cmd_tree_node_t, node);

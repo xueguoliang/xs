@@ -42,7 +42,7 @@ int xs_aio_recv_block(int fd, char** buf, int* size, int timeout)
     if(ret == 4)
     {
         *size = ntohl(*size);
-        *buf = malloc(*size + 1);
+        *buf = xs_malloc(*size + 1);
         (*buf)[*size] = 0;
         ret = xs_sock_recv_block(fd, *buf, *size, timeout);
     }

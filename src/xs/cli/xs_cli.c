@@ -16,7 +16,8 @@ void xs_cli_init(int port, char* ip)
     fd = xs_sock_connect(port, ip);
     buf = xs_cmd_resolv("clis init", &size);
     xs_logd("buf is (%s)", buf+4);
-    xs_sock_send_block(fd, buf, size, 60000);
+ //   xs_sock_send_block(fd, buf, size, 60000);
+    xs_model_send_arg(fd, 2, __xs_clis, __xs_init);
     xs_model_recv_block(&rsp, fd, 60000);
     int i;
     for(i=0; i<rsp->argc; i++)

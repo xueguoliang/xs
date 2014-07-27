@@ -10,7 +10,7 @@ int main(int argc, char* argv[])
     int fd;
     char* ip = "127.0.0.1";
     xs_model_t* rsp = NULL;
-    int port = 9998;
+    int port = CLI_SERVER_PORT;
     if(argc > 1)
     {
         port = atoi(argv[1]);
@@ -39,7 +39,7 @@ int main(int argc, char* argv[])
         if(buf)
         {
             fd = xs_sock_connect(port, ip);
-            xs_sock_send_block(fd, buf, size, 60000);
+            xs_aio_send_block(fd, buf, size, 60000);
             xs_free(buf);
             xs_model_recv_block(&rsp, fd, 60000);
             xs_close_socket(fd);
