@@ -1,3 +1,21 @@
+/*
+ * This file is part of the xs Library.
+ *
+ * Copyright (C) 2011 by Guoliang Xue <xueguoliang@gmail.com>
+ *
+ * The xs Library is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * The xs Library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with the xs Library. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "server.h"
 
@@ -67,10 +85,13 @@ int main(int argc, char** argv)
     g_clis.ctrl = xs_ctrl_create(CLI_SERVER_PORT, NULL, NULL);
     g_clis.cmds = xs_vec_create(4);
 
+    /* register commands */
     cli_reg_command(__xs_clis " " __xs_init, cli_init);
-
     cli_reg_command(__xs_clis " " __xs_show, cli_show);
     cli_reg_command(__xs_memory " " __xs_check, cli_mem_check);
+    xs_logd("register commands ok, port is %d", g_clis.ctrl->port);
+
+    // start server
     server_init();
 
     return xs_server_run();

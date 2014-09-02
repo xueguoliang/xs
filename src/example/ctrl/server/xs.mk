@@ -1,2 +1,2 @@
 
-extra_dir := ./example/ctrl/com
+#extra_dir := ./example/ctrl/com

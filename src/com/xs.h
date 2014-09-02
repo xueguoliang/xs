@@ -59,6 +59,9 @@ extern "C"{
 void xs_init();
 void xs_fini();
 
+// utils
+char* xs_gen_session_name(int n);
+
 #endif
 
 #ifdef __cplusplus

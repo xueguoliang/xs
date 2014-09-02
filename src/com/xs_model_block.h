@@ -50,6 +50,17 @@ static inline xs_model_t* xs_model_create_v(int argc, ...)
     return model;
 }
 
+static inline xs_model_t* xs_model_create_ap(int argc, va_list ap)
+{
+    int i;
+    xs_model_t* model = xs_model_create(argc);
+    for(i=0; i<argc; ++i)
+    {
+        model->argv[i] = xs_strdup(va_arg(ap, char*));
+    }
+    return model;
+}
+
 static inline void xs_model_delete(xs_model_t* model)
 {
     int i;

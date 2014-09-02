@@ -81,7 +81,6 @@ endif
 # for 
 allfiles := $(foreach d,$(make_dirs),$(shell find $(d) -name "*.c" -o -name "*.h" ))
 allfile_deps := $(allfiles)
-#allfile_deps := $(filter-out $(allfile_deps),$(appdir)__all_files__.c)
 # sort
 allfiles := $(sort $(allfiles))
 # remove ./
@@ -89,6 +88,8 @@ allfiles := $(subst ./,,$(allfiles))
 # add "com/files.h" for c style string
 allfiles := $(addprefix \",$(allfiles))
 allfiles := $(allfiles:=\",)
+
+allfile_deps := $(filter-out $(allfile_deps),$(appdir)__all_files__.c)
 
 $(appdir)__all_files__.c: $(allfile_deps)
 	@echo '#ifdef __cplusplus' > $@

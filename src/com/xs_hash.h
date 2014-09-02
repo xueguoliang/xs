@@ -46,10 +46,11 @@ static inline void xs_hash_node_destroy(xs_hash_node_t* node)
     xs_free(node);
 }
 
+// key need malloc
 static inline xs_hash_node_t* _xs_hash_node_create(const char* key, void* ptr, const char* file, int line)
 {
     xs_hash_node_t* node = (xs_hash_node_t*)__xs_malloc(sizeof(*node), file, line);
-    node->key.s = key;
+    node->key.s = key;  // do not modify to strdup or copy, just =, 通常用户会把key保存在他们的结构里
     node->value = ptr;
     return node;
 }

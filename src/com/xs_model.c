@@ -57,6 +57,7 @@ void xs_model_aio_recv_done(xs_aio_t* aio)
     }
     else
     {
+        cb->model = NULL;
         cb->func(cb);
     }
     xs_free(cb);
@@ -124,7 +125,16 @@ void xs_model_send_and_close(int fd, xs_model_t *model)
 
     xs_aio_send_no_header_and_close(fd, buf, len);
 }
-
+xs_model_t* xs_model_clone(xs_model_t* model)
+{
+    xs_model_t* ret = xs_model_create(model->argc);
+    int i=0;
+    for(i=0;i<ret->argc; ++i)
+    {
+        ret->argv[i] = xs_strdup(model->argv[i]);
+    }
+    return ret;
+}
 #ifdef __cplusplus
 }
 #endif

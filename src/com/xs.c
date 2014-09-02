@@ -46,6 +46,15 @@ void xs_fini()
     WSACleanup();
 #endif
 }
+
+char* xs_gen_session_name(int n)
+{
+    time_t t = time(NULL);    
+    char buf[128];
+    sprintf(buf, "%lld|%d", (long long int)t, n);
+    return xs_strdup(buf);
+}
+
 #ifdef __cplusplus
 }
 #endif

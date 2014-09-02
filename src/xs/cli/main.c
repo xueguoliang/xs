@@ -1,4 +1,21 @@
-
+/*
+ * This file is part of the xs Library.
+ *
+ * Copyright (C) 2011 by Guoliang Xue <xueguoliang@gmail.com>
+ *
+ * The xs Library is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * The xs Library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with the xs Library. If not, see <http://www.gnu.org/licenses/>.
+ */
 #include "xs_cli.h"
 
 char g_cmd[2048];
@@ -44,7 +61,9 @@ int main(int argc, char* argv[])
             xs_model_recv_block(&rsp, fd, 60000);
             xs_close_socket(fd);
 
-            printf("%s\n", rsp->argv[0]);
+            int i;
+            for(i=0; i<rsp->argc; i++)
+                printf("%s\n", rsp->argv[i]);
             xs_model_delete(rsp);
         }
     }
