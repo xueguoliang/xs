@@ -93,6 +93,7 @@ void cs_req_send_cbk(xs_model_cb_t* cb)
 
 void cs_user_req_service(xs_model_t* model, int fd, struct xs_ctrl_t* ctrl)
 {
+    ctrl = ctrl;
     // connect to is, if failure, send error information to client
     int fd1 = xs_sock_connect(IS_PORT, IS_IP);
     if(fd1 < 0)
@@ -111,7 +112,7 @@ void cs_user_req_service(xs_model_t* model, int fd, struct xs_ctrl_t* ctrl)
     cs_session_t* session = cs_new_session(fd);
     xs_hash_add(g_cs.sessions, session->session_name, session);
 
-    xs_model_t* model = xs_model_create_v(4, 
+    model = xs_model_create_v(4, 
             __xs_cs, 
             __xs_req_service, 
             m->service_type, 
