@@ -32,11 +32,12 @@ void xs_ctrl_accept(xs_ev_sock_t* ev)
         ctrl->r(fd, ctrl);
     }
 
+    int err = errno;
     xs_ev_add(ev->ev);
-    if(errno != EAGAIN)
+    if(err != EAGAIN)
     {
         FILE* f = fopen("accept.err", "a+");
-        fprintf("accept error=%d\n", errno);
+        fprintf(f, "accept error=%d\n", err);
         fclose(f);
     }
 #if 0
