@@ -39,7 +39,7 @@ void xs_clis_op_clis_init(void* req, int fd, xs_ctrl_t* ctrl)
     {
         rsp->argv[i] = xs_dict_str(g_clis.cmds, xs_itoa_r(i, key));
     }
-    
+
     xs_model_send_and_close(rsp, fd);
     xs_model_delete(rsp);
 }
@@ -121,12 +121,26 @@ void xs_server_init(int thread_count, void(*quit)(), int argc, char* argv[])
 #endif
 }
 
+static inline void xs_server_set_reuse(int fd)
+{
+    int option = 1;
+
+    if (setsockopt ( fd, SOL_SOCKET, SO_REUSEADDR, &option, sizeof(option) ) < 0)
+    {
+        xs_loge("set socket reuse errno=%d", errno);
+        exit(0);
+    }
+
+}
+
 xs_ev_sock_t* xs_server_start_tcp(uint16_t port, int buf, void(*func)(xs_ev_sock_t*), void* ptr)
 {
     int ret = 0;
     XSOCKET fd;
     fd = socket(AF_INET, SOCK_STREAM, 0);
-    
+
+    xs_server_set_reuse(fd);
+
     ret = xs_sock_bind(fd, port, NULL);
     if(ret < 0)
     {

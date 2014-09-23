@@ -32,15 +32,27 @@ void xs_ctrl_accept(xs_ev_sock_t* ev)
         ctrl->r(fd, ctrl);
     }
 
+    int err = errno;
+    xs_ev_add(ev->ev);
+    if(err != EAGAIN)
+    {
+        FILE* f = fopen("accept.err", "a+");
+        fprintf(f, "accept error=%d\n", err);
+        fclose(f);
+    }
+#if 0
+
     if(errno == EAGAIN)
     {
         xs_ev_add(ev->ev);
     }
     else
     {
-        xs_loge("server error");
+        xs_loge("server error = %d", errno);
         xs_ctrl_destroy(ev->arg);
+        exit(0);
     }
+#endif
 }
 
 xs_ctrl_t* xs_ctrl_create(uint16_t port, 
