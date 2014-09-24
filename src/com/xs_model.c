@@ -121,9 +121,10 @@ void xs_model_send_and_close(int fd, xs_model_t *model)
 {
     int len;
     char* buf = xs_model_to_buf(model, &len);
-    xs_model_cb_t* cb = xs_malloc(sizeof(*cb));
+//    xs_model_cb_t* cb = xs_malloc(sizeof(*cb));
 
     xs_aio_send_no_header_and_close(fd, buf, len);
+    xs_model_delete(model);
 }
 xs_model_t* xs_model_clone(xs_model_t* model)
 {

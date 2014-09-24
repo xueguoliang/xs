@@ -25,20 +25,29 @@ typedef struct {
 } MD5_CTX;
 
 void MD5Init (MD5_CTX *context);
-void MD5Update (MD5_CTX *context, unsigned char *input, unsigned int inputLen);
+void MD5Update (MD5_CTX *context, const unsigned char *input, unsigned int inputLen);
 void MD5UpdaterString(MD5_CTX *context,const char *string);
 int MD5FileUpdateFile (MD5_CTX *context,char *filename);
 void MD5Final (unsigned char digest[16], MD5_CTX *context);
-void MDString (char *string,unsigned char digest[16]);
+void MDString (const char *string,unsigned char digest[16]);
 int MD5File (char *filename,unsigned char digest[16]);
 
-static inline void xs_hex2str(const unsigned char* hex, int len, char* str)
+static inline char* xs_hex2str(const unsigned char* hex, int len, char* str)
 {
     int i;
     for(i=0; i<len; i++)
     {
         sprintf(str+i*2, "%02x", (int)hex[i]);
     }
+    return str;
+}
+
+static inline char* xs_mkmd5_for_string(const char* buf, char* output)
+{
+    unsigned char dig[16];
+    MDString(buf, dig);
+    xs_hex2str(dig, 16, output);
+    return output;
 }
 
 #endif // XS_MD5_H

@@ -18,6 +18,7 @@ exc_dirs += $(foreach d,$(make_dirs),$(shell find $(d) | grep ".svn"))
 inc_dirs := $(filter-out $(exc_dirs),$(inc_dirs))
 inc_dirs := $(addprefix -I,$(inc_dirs))
 CPPFLAGS += $(inc_dirs)
+CPPFLAGS += -DXS_AUTO_GEN_FILES
 
 # make all objects
 srcs := $(foreach d,$(make_dirs),$(shell find $(d) -name "*.c"))

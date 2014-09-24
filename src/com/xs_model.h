@@ -41,6 +41,7 @@ static inline void xs_model_set(xs_model_t* model, int i, const char* arg)
 #define __xs_ok "ok"
 #define __xs_err "err"
 #define xs_success(__result) __result && strcmp(__result, __xs_ok) == 0
+#define argv(__n) argv[__n]
 
 typedef struct xs_model_cb_t
 {

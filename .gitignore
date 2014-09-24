@@ -11,3 +11,8 @@ xs.includes
 *.creator.user
 *.pro.user
 build-*-Desktop-Debug
+*qt-win/timer/Makefile
+*qt-win/timer/timer
+*__all_files__.c
+*Makefile
+*moc_*.cpp
