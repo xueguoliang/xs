@@ -1,9 +1,12 @@
+#ifndef MAIN_H
+#define MAIN_H
 
-#ifndef __MAIN_H__
-#define __MAIN_H__
+#include <QSqlTableModel>
+#include <QSqlRecord>
+#include <QSqlField>
+#include <QSqlError>
 
-#include "xs.h"
-#include <mysql.h>
-#include "../qchat_def.h"
+#include "../../com/xs.h"
+#include "../../qchat/qchat_def.h"
 
-#endif
+#endif // MAIN_H

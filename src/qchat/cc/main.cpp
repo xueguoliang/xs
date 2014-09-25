@@ -1,6 +1,7 @@
 
 #include "main.h"
 #include "CReg.h"
+#include "CLogin.h"
 
 #ifdef XS_AUTO_GEN_FILES
 int g_mem_file_count = 0;
@@ -12,7 +13,7 @@ int main(int argc, char** argv)
     QApplication app(argc, argv);
     xs_init();
 
-    CReg reg;
+    CLogin reg;
     reg.exec();
 
     return app.exec();

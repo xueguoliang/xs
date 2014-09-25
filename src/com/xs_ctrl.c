@@ -143,6 +143,21 @@ void xs_ctrl_destroy(xs_ctrl_t* ctrl)
     xs_free(ctrl);
 }
 
+void xs_ctrl_resp_cbk(xs_model_cb_t* cb)
+{
+    xs_ctrl_t* ctrl = cb->ptr;
+    ctrl->r(cb->aio->fd, ctrl);
+}
+
+void xs_ctrl_resp(xs_ctrl_t *ctrl, int fd, int argc, ...)
+{
+    va_list ap;
+    va_start(ap, argc);
+    xs_model_t* model = xs_model_create_ap(argc, ap);
+    va_end(ap);
+    xs_model_send(fd, xs_ctrl_resp_cbk, ctrl, model);
+}
+
 #if 0
 int xs_ctrl_send_block_ip(xs_ctrl_t* ctrl, char* ip, char* buf, int size)
 {

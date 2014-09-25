@@ -59,6 +59,58 @@ char* xs_model_to_buf(xs_model_t* model, int* olen);
 void xs_model_recv(int fd, xs_model_cbk_t cbk, void* ptr);
 void xs_model_send(int fd, xs_model_cbk_t cbk, void* ptr, xs_model_t* model);
 void xs_model_send_and_close(int fd, xs_model_t* model);
+static inline xs_model_t* xs_model_create(int argc)
+{
+    xs_model_t* model = (xs_model_t*)xs_malloc(sizeof(model->argc)+sizeof(char*)*argc);
+    memset(model, 0, sizeof(int)+sizeof(char*)*argc);
+    model->argc = argc;
+    return model;
+}
+
+static inline xs_model_t* xs_model_create_v(int argc, ...)
+{
+    int i;
+    xs_model_t* model = xs_model_create(argc);
+    va_list ap;
+    va_start(ap, argc);
+    for(i=0; i<argc; ++i)
+    {
+        model->argv[i] = xs_strdup(va_arg(ap, char*));
+    }
+    va_end(ap);
+    return model;
+}
+
+static inline xs_model_t* xs_model_create_ap(int argc, va_list ap)
+{
+    int i;
+    xs_model_t* model = xs_model_create(argc);
+    for(i=0; i<argc; ++i)
+    {
+        model->argv[i] = xs_strdup(va_arg(ap, char*));
+    }
+    return model;
+}
+
+static inline void xs_model_delete(xs_model_t* model)
+{
+    int i;
+    for(i=0 ;i<model->argc; ++i)
+    {
+        xs_free(model->argv[i]);
+    }
+    xs_free(model);
+}
+
+static inline void xs_model_send_and_close_v(int fd, int argc, ...)
+{
+    va_list ap;
+    va_start(ap, argc);
+    xs_model_t* model = xs_model_create_ap(argc, ap);
+    va_end(ap);
+    xs_model_send_and_close(fd, model);
+}
+
 xs_model_t* xs_model_clone(xs_model_t* model);
 
 #endif

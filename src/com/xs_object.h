@@ -39,7 +39,7 @@ static inline void xs_object_delete(xs_object_t* obj)
     xs_hash_destroy(obj, NULL);
 }
 
-static inline int xs_object_add_op(xs_object_t* obj, char* name, xs_object_handler_t op)
+static inline int xs_object_add_op(xs_object_t* obj, const char* name, xs_object_handler_t op)
 {
     return xs_hash_add(obj, name, (void*)op);
 }
