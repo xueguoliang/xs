@@ -104,7 +104,7 @@ int xs_mem_file_index(const char* file1)
         return -1;
 
     /* if filename is start with ./, clear it */
-    if(*file1 == '.')
+    if(*file1 == '.' && file1[1] == '/')
         file = file1 + 2;
 
     while(b<=e)
@@ -200,7 +200,7 @@ void xs_mempool_destroy(xs_mempool_t* mem_pool)
             block_size = mem_pool->min_block_size << block->index;
         	if(block->file != (uint16_t)-1)
             {
-               // xs_error("mem leak, filename=%s, line=%d, block_size=%d", g_mem_files[block->file], block->line, block_size);
+               xs_loge("mem leak, filename=%s, line=%d, block_size=%d", g_mem_files[block->file], block->line, block_size);
             }
             size += block_size;
         }
@@ -217,11 +217,11 @@ void xs_mempool_destroy(xs_mempool_t* mem_pool)
         uint16_t __index = block->index;
         if(__index != (uint16_t)-1)
         {
-         //   xs_error("*******mem leak, filename=%s, line=%d", g_mem_files[block->file], block->line);
+           xs_loge("*******mem leak, filename=%s, line=%d", g_mem_files[block->file], block->line);
         }
         else
         {
-          //  xs_error("********mem leak, filename=unknown, line=%d", block->line);
+           xs_loge("********mem leak, filename=unknown, line=%d", block->line);
         }
         free(node);
     }
@@ -299,8 +299,6 @@ void* xs_mempool_alloc(xs_mempool_t* mem_pool, int size, const char* file, int l
     xs_mempool_block_t * block;
     int size_fit = mem_pool->min_block_size;
     int index = 0;
-
-
     size += XS_MEM_EXTRA;
     if(size > mem_pool->max_block_size)
     {
@@ -329,6 +327,8 @@ void* xs_mempool_alloc(xs_mempool_t* mem_pool, int size, const char* file, int l
 
     /* TODO record files */
     block->file = xs_mem_file_index(file);
+
+
     block->line = line;
 
     block->magic = (uint16_t)XS_MEM_MAGIC;

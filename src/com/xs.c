@@ -33,10 +33,13 @@ void xs_init()
     xs_loginit();
     g_process.mp = g_mp = xs_mempool_create(NULL, 0, 512000); 
     pthread_setspecific(g_thread_key, g_mp);
+
+
 }
 
 void xs_fini()
 {
+
 #ifdef XS_USE_MEMPOOL
     xs_mempool_destroy(g_mp);
 #endif

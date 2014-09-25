@@ -29,9 +29,9 @@ SOURCES += main.cpp \
     ../../com/xs_sort.c \
     ../../com/xs_stat.c \
     ../../com/xs_tree.c \
-    CReg.cpp \
-    CLogin.cpp \
-    CChat.cpp
+    cchat.cpp \
+    clogin.cpp \
+    creg.cpp
 
 QT += widgets gui
 
@@ -67,11 +67,11 @@ HEADERS += \
     ../../com/xs_tree.h \
     ../../com/xs_util.h \
     ../../com/xs_vec.h \
-    CReg.h \
     main.h \
     ../qchat_def.h \
-    CLogin.h \
-    CChat.h
+    cchat.h \
+    clogin.h \
+    creg.h
 
 !win32{
 exists(__all_files__.c){

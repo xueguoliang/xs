@@ -1,6 +1,6 @@
-#include "CReg.h"
+#include "clogin.h"
 
-CReg::CReg(QWidget *parent) :
+CLogin::CLogin(QWidget *parent) :
     QDialog(parent)
 {
     QGridLayout* grid = new QGridLayout;
@@ -8,10 +8,8 @@ CReg::CReg(QWidget *parent) :
     grid->addWidget(_username = new QLineEdit, 0, 1);
     grid->addWidget(new QLabel("密码："), 1, 0);
     grid->addWidget(_password = new QLineEdit, 1, 1);
-    grid->addWidget(new QLabel("再输入一次密码："), 2, 0);
-    grid->addWidget(_passwordAgain = new QLineEdit, 2, 1);
 
-    QPushButton* buttonOK = new QPushButton("注册");
+    QPushButton* buttonOK = new QPushButton("登录");
     QPushButton* buttonClose = new QPushButton("关闭");
     QHBoxLayout* hBox = new QHBoxLayout;
     hBox->addStretch(1);
@@ -32,19 +30,12 @@ CReg::CReg(QWidget *parent) :
     setLayout(layout);
 
     _password->setEchoMode(QLineEdit::Password);
-    _passwordAgain->setEchoMode(QLineEdit::Password);
 
-    connect(buttonOK, SIGNAL(clicked()), this, SLOT(doReg()));
+    connect(buttonOK, SIGNAL(clicked()), this, SLOT(doLogin()));
     connect(buttonClose, SIGNAL(clicked()), this, SLOT(reject()));
 }
 
-/*
-    model0 = userman
-    model1 = reg
-    model2 = username
-    model3 = password
-*/
-void CReg::doReg()
+void CLogin::doLogin()
 {
     int ret;
     if(_username->text().length() == 0 || _password->text().length() == 0)
@@ -52,11 +43,7 @@ void CReg::doReg()
         QMessageBox::warning(this, "Error", "Username or Password can not be NULL");
         return;
     }
-    if(_password->text() != _passwordAgain->text())
-    {
-        QMessageBox::warning(this, "Error", "Password not same");
-        return;
-    }
+
     // connect to server
     int fd = xs_sock_connect(__xs_port, "127.0.0.1");
     if(fd < 0)
@@ -69,7 +56,7 @@ void CReg::doReg()
     // make the packet to server
     xs_model_t* model = xs_model_create(4);
     model->argv[0] = xs_strdup(__xsc_userman);
-    model->argv[1] = xs_strdup(__xsc_reg);
+    model->argv[1] = xs_strdup(__xsc_login);
     model->argv[2] = xs_strdup(_username->text().toUtf8().data());
     // must transfer to MD5
     char md5[64];
@@ -91,20 +78,20 @@ void CReg::doReg()
     if(ret != 0)
     {
         ::close(fd);
-        QMessageBox::warning(this, "Error", "Recv reg data error");
+        QMessageBox::warning(this, "Error", "Recv login ack error");
         return;
     }
 
     if(xs_success(model->argv[0]))
     {
         ::close(fd);
-        QMessageBox::information(this, "Info", "Register success");
+        QMessageBox::information(this, "Info", "Login success");
         accept();
         xs_model_delete(model);
         return;
     }
 
-    QMessageBox::warning(this, "Error", QString("Reg Error:")+model->argv(1));
+    QMessageBox::warning(this, "Error", QString("Login Error:")+model->argv(1));
     xs_model_delete(model);
     ::close(fd);
 }

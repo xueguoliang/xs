@@ -72,7 +72,6 @@ static inline void xs_rsp_error(const char* reason, int fd)
 {
     xs_model_t* rsp = xs_model_create_v(2, __xs_err, reason);
     xs_model_send_and_close(fd, rsp);
-    xs_model_delete(rsp);
     return;
 }
 
@@ -80,7 +79,6 @@ static inline void xs_rsp_ok(int fd)
 {
     xs_model_t* rsp = xs_model_create_v(1, __xs_ok);
     xs_model_send_and_close(fd, rsp);
-    xs_model_delete(rsp);
     return;
 }
 
@@ -91,7 +89,6 @@ static inline void xs_rsp(int fd, int argc, ...)
     xs_model_t* model = xs_model_create_ap(argc, ap);
     va_end(ap);
     xs_model_send_and_close(fd, model);
-    xs_model_delete(model);
     return;
 }
 

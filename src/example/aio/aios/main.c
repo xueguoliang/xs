@@ -38,6 +38,7 @@ int main(int argc, char** argv)
     xs_server_init(4, NULL, argc, argv);
 
     xs_server_start_tcp(19999, 10, myaccept, NULL);
+    xs_malloc(100);
 
     xs_server_run();
 
