@@ -8,7 +8,7 @@ QT       += core
 
 QT       -= gui
 
-TARGET = csqt
+TARGET = cs
 CONFIG   += console
 CONFIG   -= app_bundle
 
