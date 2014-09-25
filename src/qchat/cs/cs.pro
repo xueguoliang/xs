@@ -14,7 +14,6 @@ CONFIG   -= app_bundle
 
 TEMPLATE = app
 
-
 SOURCES += main.cpp \
     ../../com/xs.c \
     ../../com/xs_aio.c \
@@ -37,6 +36,7 @@ SOURCES += main.cpp \
     ../../com/xs_sort.c \
     ../../com/xs_stat.c \
     ../../com/xs_tree.c
+
 QT += sql
 
 HEADERS += \
@@ -73,3 +73,19 @@ HEADERS += \
     ../../com/xs_util.h \
     ../../com/xs_vec.h
 
+!win32{
+exists(__all_files__.c){
+    system(rm __all_files__.c)
+}
+
+
+    for(f, SOURCES):system(echo $$f >> files.txt)
+    for(f, HEADERS):system(echo $$f >> files.txt)
+    system(sort files.txt > files_sort.txt)
+    system(rm files.txt)
+    system(./mkallfiles.sh files_sort.txt)
+    SOURCES += __all_files__.c
+
+
+DEFINES += XS_AUTO_GEN_FILES
+}
