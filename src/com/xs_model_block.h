@@ -28,6 +28,10 @@ int xs_model_recv_block_arg(int fd, int argc, ...);
 int xs_model_send_block(xs_model_t* model, int fd, int timeout);
 int xs_model_recv_block(xs_model_t** model, int fd, int timeout);
 
+xs_model_t* xs_model_rpc(xs_model_t* model, int fd, int timeout);
+xs_model_t* xs_model_rpc_arg(int fd, int argc, ...);
+xs_model_t* xs_model_rpc_v(int fd, va_list ap);
+
 
 #endif
 #ifdef __cplusplus
