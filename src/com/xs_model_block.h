@@ -22,8 +22,8 @@ extern "C"{
 #ifndef __XS_MODEL_BLOCK_H__
 #define __XS_MODEL_BLOCK_H__
 
-int xs_model_send_arg(int fd, int argc, ...);
-int xs_model_recv_arg(int fd, int argc, ...);
+int xs_model_send_block_arg(int fd, int argc, ...);
+int xs_model_recv_block_arg(int fd, int argc, ...);
 
 int xs_model_send_block(xs_model_t* model, int fd, int timeout);
 int xs_model_recv_block(xs_model_t** model, int fd, int timeout);

@@ -1,18 +1,16 @@
 
 #include "main.h"
-#include "creg.h"
-#include "clogin.h"
+#include "cmainwnd.h"
 
 int main(int argc, char** argv)
 {
     QApplication app(argc, argv);
     xs_init();
 
+    CMainWnd mainWnd;
+    mainWnd.show();
 
-    CLogin reg;
-    reg.exec();
-
-  //  app.exec();
+    app.exec();
     xs_fini();
     return 0;
 }

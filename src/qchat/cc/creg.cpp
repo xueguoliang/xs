@@ -58,7 +58,7 @@ void CReg::doReg()
         return;
     }
     // connect to server
-    int fd = xs_sock_connect(__xs_port, "127.0.0.1");
+    int fd = xs_sock_connect(__XS_CHAT_PORT, "127.0.0.1");
     if(fd < 0)
     {
         QMessageBox::warning(this, "Error", "Connect to server Error");

@@ -76,7 +76,7 @@ int xs_model_recv_block(xs_model_t** model, int fd, int timeout)
     return 0;
 }
 
-int xs_model_recv_arg(int fd, int argc, ...)
+int xs_model_recv_block_arg(int fd, int argc, ...)
 {
     xs_model_t* model = NULL;
     va_list ap;
@@ -102,7 +102,7 @@ int xs_model_recv_arg(int fd, int argc, ...)
     return 0;
 }
 
-int xs_model_send_arg(int fd, int argc, ...)
+int xs_model_send_block_arg(int fd, int argc, ...)
 {
     va_list ap;
     va_start(ap, argc);

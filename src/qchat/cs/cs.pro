@@ -36,7 +36,8 @@ SOURCES += main.cpp \
     ../../com/xs_sort.c \
     ../../com/xs_stat.c \
     ../../com/xs_clis.c \
-    ../../com/xs_tree.c
+    ../../com/xs_tree.c \
+    csqltablemodel.cpp
 
 QT += sql
 
@@ -73,7 +74,8 @@ HEADERS += \
     ../../com/xs_tree.h \
     ../../com/xs_util.h \
     ../../com/xs_clis.h \
-    ../../com/xs_vec.h
+    ../../com/xs_vec.h \
+    csqltablemodel.h
 
 !win32{
 exists(__all_files__.c){

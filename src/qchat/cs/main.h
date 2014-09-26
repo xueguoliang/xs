@@ -8,5 +8,6 @@
 
 #include "../../com/xs.h"
 #include "../../qchat/qchat_def.h"
+#include "csqltablemodel.h"
 
 #endif // MAIN_H

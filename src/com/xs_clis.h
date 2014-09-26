@@ -34,6 +34,7 @@ extern "C"{
 
 void xs_clis_init();
 void xs_clis_fini();
+void xs_clis_reg_command(const char* cmd, xs_object_handler_t op);
 
 #ifdef __cplusplus
 }

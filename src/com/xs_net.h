@@ -68,6 +68,7 @@ int socketpair(int af, int type, int protocol, XSOCKET socks[2]);
 #include <netinet/tcp.h>
 #include <netdb.h>
 #define xs_close_epoll close
+
 #define xs_close_socket(_fd) do{xs_logd("close socket");close(_fd);}while(0)
 typedef int XSOCKET;
 #endif

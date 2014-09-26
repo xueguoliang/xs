@@ -14,5 +14,9 @@
 #include <QLineEdit>
 #include <QApplication>
 #include <QWidget>
+#include <QTextEdit>
+#include <QTextBrowser>
+#include <QListWidget>
+#include <QMap>
 
 #endif // MAIN_H

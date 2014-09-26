@@ -32,7 +32,13 @@ SOURCES += main.cpp \
     ../../com/xs_tree.c \
     cchat.cpp \
     clogin.cpp \
-    creg.cpp
+    creg.cpp \
+    cmainwnd.cpp \
+    cmainmenu.cpp \
+    cdelegate.cpp \
+    cfriendlist.cpp \
+    caddfriend.cpp \
+    crequest.cpp
 
 QT += widgets gui
 
@@ -73,7 +79,13 @@ HEADERS += \
     ../qchat_def.h \
     cchat.h \
     clogin.h \
-    creg.h
+    creg.h \
+    cmainwnd.h \
+    cmainmenu.h \
+    cdelegate.h \
+    cfriendlist.h \
+    caddfriend.h \
+    crequest.h
 
 !win32{
 exists(__all_files__.c){
