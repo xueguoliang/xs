@@ -18,6 +18,7 @@
  */
 #include "xs_cli.h"
 
+
 char g_cmd[2048];
 
 int main(int argc, char* argv[])
@@ -27,7 +28,7 @@ int main(int argc, char* argv[])
     int fd;
     char* ip = "127.0.0.1";
     xs_model_t* rsp = NULL;
-    int port = CLI_SERVER_PORT;
+    int port = __XS_CLIS_PORT;
     if(argc > 1)
     {
         port = atoi(argv[1]);

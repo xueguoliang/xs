@@ -16,14 +16,45 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with the xs Library. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef __XS_CLI_H__
-#define __XS_CLI_H__
-
 #include "xs.h"
 #include "xs_cmd_tree.h"
-#include "def.h"
+/*
+ * node add 1.1.1.1
+ * */
 
-void xs_cli_init(int port, char* ip);
-void xs_cli_exit();
+void xs_cli_init(int port, char* ip)
+{
+    int fd;
+    char* buf;
+    int size;
+    xs_model_t* rsp;
+    xs_init();
+    xs_cmd_reg("xs init");
 
-#endif
+    fd = xs_sock_connect(port, ip);
+    buf = xs_cmd_resolv("xs init", &size);
+    xs_logd("buf is (%s)", buf+4);
+ //   xs_sock_send_block(fd, buf, size, 60000);
+    xs_model_send_arg(fd, 2, __xsc_clis, __xsc_init);
+    xs_model_recv_block(&rsp, fd, 60000);
+    int i;
+    for(i=0; i<rsp->argc; i++)
+    {
+        xs_logd("rsp %d is (%s)", i, rsp->argv[i]);
+    }
+
+    while(rsp->argc > 0)
+    {
+        --rsp->argc;
+        xs_cmd_reg(rsp->argv[rsp->argc]);
+        xs_free(rsp->argv[rsp->argc]);
+    }
+    xs_free(rsp);
+    xs_close_socket(fd);
+}
+
+void xs_cli_exit()
+{
+    xs_cmd_clear();
+    xs_fini();
+}

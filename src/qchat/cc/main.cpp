@@ -1,7 +1,7 @@
 
 #include "main.h"
-#include "CReg.h"
-#include "CLogin.h"
+#include "creg.h"
+#include "clogin.h"
 
 int main(int argc, char** argv)
 {

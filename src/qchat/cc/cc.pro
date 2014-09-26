@@ -28,6 +28,7 @@ SOURCES += main.cpp \
     ../../com/xs_sock.c \
     ../../com/xs_sort.c \
     ../../com/xs_stat.c \
+    ../../com/xs_clis.c \
     ../../com/xs_tree.c \
     cchat.cpp \
     clogin.cpp \
@@ -57,6 +58,7 @@ HEADERS += \
     ../../com/xs_model.h \
     ../../com/xs_model_block.h \
     ../../com/xs_net.h \
+    ../../com/xs_clis.h \
     ../../com/xs_object.h \
     ../../com/xs_popen.h \
     ../../com/xs_rbtree.h \

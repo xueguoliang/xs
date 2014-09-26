@@ -55,6 +55,7 @@ extern "C"{
 #include "xs_server.h"
 #include "xs_vec.h"
 #include "xs_md5.h"
+#include "xs_clis.h"
 
 void xs_init();
 void xs_fini();

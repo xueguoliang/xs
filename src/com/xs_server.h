@@ -66,7 +66,8 @@ void xs_clis_reg_command(char* command);
 #endif
 void xs_server_init(int thread_count, void(*quit)(), int argc, char* argv[]);
 #define xs_server_run xs_ev_run
-#define xs_server_fini xs_fini
+//#define xs_server_fini xs_fini
+void xs_server_fini();
 
 xs_ev_sock_t* xs_server_start_tcp(uint16_t port, int buf, void(*accept_func)(xs_ev_sock_t*), void* ptr);
 

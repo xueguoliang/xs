@@ -35,6 +35,7 @@ SOURCES += main.cpp \
     ../../com/xs_sock.c \
     ../../com/xs_sort.c \
     ../../com/xs_stat.c \
+    ../../com/xs_clis.c \
     ../../com/xs_tree.c
 
 QT += sql
@@ -71,6 +72,7 @@ HEADERS += \
     ../../com/xs_stat.h \
     ../../com/xs_tree.h \
     ../../com/xs_util.h \
+    ../../com/xs_clis.h \
     ../../com/xs_vec.h
 
 !win32{

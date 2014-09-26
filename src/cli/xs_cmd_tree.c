@@ -16,7 +16,8 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with the xs Library. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "xs_cli.h"
+#include "xs.h"
+#include "xs_cmd_tree.h"
 
 xs_tree_t g_cmd_tree = (xs_tree_t){NULL,};
 

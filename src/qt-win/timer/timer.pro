@@ -15,6 +15,7 @@ LIBS += -lpthread -lrt
 SOURCES += \
     xs_mem_config.c \
     ../../com/xs_tree.c \
+    ../../com/xs_clis.c \
     ../../com/xs_stat.c \
     ../../com/xs_sort.c \
     ../../com/xs_sock.c \
@@ -38,6 +39,7 @@ SOURCES += \
 HEADERS += \
     ../../com/xs_vec.h \
     ../../com/xs_util.h \
+    ../../com/xs_clis.h \
     ../../com/xs_tree.h \
     ../../com/xs_stat.h \
     ../../com/xs_sort.h \

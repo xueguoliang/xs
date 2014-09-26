@@ -112,6 +112,7 @@ void xs_server_init(int thread_count, void(*quit)(), int argc, char* argv[])
 
     xs_init();
     xs_ev_init(thread_count, quit);
+    xs_clis_init();
 
 #if 0
     if(argc == 1)
@@ -119,6 +120,12 @@ void xs_server_init(int thread_count, void(*quit)(), int argc, char* argv[])
     else
         xs_clis_init(atoi(argv[1]));
 #endif
+}
+
+void xs_server_fini()
+{
+    xs_clis_fini();
+    xs_fini();
 }
 
 static inline void xs_server_set_reuse(int fd)

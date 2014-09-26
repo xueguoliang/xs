@@ -1,3 +1,5 @@
+
+
 /*
  * This file is part of the xs Library.
  *
@@ -16,35 +18,24 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with the xs Library. If not, see <http://www.gnu.org/licenses/>.
  */
+#ifndef __XS_CLIS_H__
+#define __XS_CLIS_H__
 
-#ifndef __XS_COM_DEF__
-#define __XS_COM_DEF__
+#ifdef __cplusplus
+extern "C"{
+#endif
 
-// command
-#define __xs_clis "clis"
-#define __xs_init "init"
-#define __xs_show "show"
-#define __xs_memory "mem"
-#define __xs_check "check"
+#define __XS_CLIS_PORT 9911
+#define __xsc_clis "xs"
+#define __xsc_init "init"
+#define __xsc_show "show"
+#define __xsc_memory "mem"
+#define __xsc_check "check"
 
-// user to server
-#define __xs_user "user"
-#define __xs_req_service "req_service"
-// request one server
-typedef struct model_user_req_service
-{
-    intptr_t argc;
-    char* cmd1;
-    char* cmd2;
+void xs_clis_init();
+void xs_clis_fini();
 
-    char* service_type;
-} model_user_req_service;
-
-// common command
-
-
-#define CLI_SERVER_PORT 9899
-#define CS_PORT 9999
-
-
+#ifdef __cplusplus
+}
+#endif
 #endif
