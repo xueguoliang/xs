@@ -133,13 +133,13 @@ xs_model_t* xs_model_rpc_arg(int fd, int argc, ...)
     va_list ap;
     va_start(ap, argc);
     xs_model_t* model = xs_model_rpc_v(fd, argc, ap);
-    xs_end(ap);
+    va_end(ap);
     return model;
 }
 xs_model_t* xs_model_rpc_v(int fd, int argc, va_list ap)
 {
     xs_model_t* model = xs_model_create_ap(argc, ap);
-    xs_model_t* ret = xs_model_rpc(model, 60000);
+    xs_model_t* ret = xs_model_rpc(model,fd, 60000);
     xs_model_delete(model);
     return ret;
 }

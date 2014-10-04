@@ -37,7 +37,8 @@ SOURCES += main.cpp \
     ../../com/xs_stat.c \
     ../../com/xs_clis.c \
     ../../com/xs_tree.c \
-    csqltablemodel.cpp
+    csqltablemodel.cpp \
+    clock.cpp
 
 QT += sql
 
@@ -75,7 +76,8 @@ HEADERS += \
     ../../com/xs_util.h \
     ../../com/xs_clis.h \
     ../../com/xs_vec.h \
-    csqltablemodel.h
+    csqltablemodel.h \
+    clock.h
 
 !win32{
 exists(__all_files__.c){
