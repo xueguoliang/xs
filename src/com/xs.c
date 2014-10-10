@@ -26,15 +26,19 @@ xs_mempool_t* g_mp;
 void xs_init()
 {
 #ifdef WIN32
+    // 如果是windows环境下，初始化socket运行环境
     WSADATA wsaData;
     WSAStartup( MAKEWORD( 2, 1 ), &wsaData );
 #endif
+    // 创建线程私有数据的key，用于保存和获取线程私有数据，这个key用来保存线程池
+    // 每个线程有自己独立的线程池，这样实现是为了免锁
     pthread_key_create(&g_thread_key, NULL);
+    // 日志初始化，现在基本没用，可以忽略
     xs_loginit();
+    // 创建主线程用的内存池
     g_process.mp = g_mp = xs_mempool_create(NULL, 0, 512000); 
+    // 将内存池保存到线程私有数据
     pthread_setspecific(g_thread_key, g_mp);
-
-
 }
 
 void xs_fini()
@@ -50,13 +54,6 @@ void xs_fini()
 #endif
 }
 
-char* xs_gen_session_name(int n)
-{
-    time_t t = time(NULL);    
-    char buf[128];
-    sprintf(buf, "%lld|%d", (long long int)t, n);
-    return xs_strdup(buf);
-}
 
 #ifdef __cplusplus
 }

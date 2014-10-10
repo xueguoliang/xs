@@ -9,12 +9,12 @@ com_deps := $(com_objs:.o=.d)
 xs_mks := $(shell find . -name "xs.mk")
 xs_dir := $(dir $(xs_mks))
 
-CPPFLAGS += -fPIC -shared
-LIBS += -lpthread -lrt
-CFLAGS += -DXS_AUTO_GEN_FILES
-
 qt_mks := $(shell find . -name "*.pro")
 qt_mks := $(dir $(qt_mks))
+
+#CPPFLAGS += -fPIC -shared
+LIBS += -lpthread -lrt
+CFLAGS += -DXS_AUTO_GEN_FILES
 
 curdir := $(shell pwd)
 

@@ -56,7 +56,7 @@ xs_mempool_t* xs_mempool_create(void* rtdata, int rtid, int max_alloc_size)
 
     xs_list_init(&mem_pool->extra);
 
-    max_alloc_size += XS_MEM_EXTRA;
+    max_alloc_size += XS_MEM_EXTRA;  // 12
 
     mem_pool->trunks = NULL;
 
@@ -76,12 +76,13 @@ xs_mempool_t* xs_mempool_create(void* rtdata, int rtid, int max_alloc_size)
         ++mem_pool->max_block_index;
         max_alloc_size /= 2;
     }
+    // 矫正最大可申请的内存块大小
     mem_pool->max_block_size = (mem_pool->min_block_size << mem_pool->max_block_index);
     mem_pool->blocks = malloc(sizeof(*mem_pool->blocks) * (mem_pool->max_block_index+1));
 
     for(i=0; i<=mem_pool->max_block_index; ++i)
     {
-        mem_pool->blocks[i] = NULL;
+        mem_pool->blocks[i] = NULL; // 链表职空
     }
 
     xs_logd("max block=%dK", mem_pool->max_block_size/1024);
@@ -252,6 +253,7 @@ xs_mempool_block_t* __xs_mempool_alloc_block(xs_mempool_t* mem_pool, int index, 
 
     if(mem_pool->blocks[index] == NULL)
     {
+        // 申请一个trunk，并将塔保存在mempool中欧你
         trunk = malloc(sizeof(*trunk) + mem_pool->max_block_size);
         trunk->next = mem_pool->trunks;
         mem_pool->trunks = trunk;

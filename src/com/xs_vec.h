@@ -109,10 +109,11 @@ static inline int xs_vec_add(xs_vec_t* vec, void* data)
 
 static inline void* xs_vec_rm(xs_vec_t* vec, int i)
 {
-    /* 0, 1, 2, 3, 4*/
-    void* data = vec->vs[i];
     if(i >= vec->count)
         return NULL;
+
+    /* 0, 1, 2, 3, 4*/
+    void* data = vec->vs[i];
 
     for(;i<vec->count-1; ++i)
     {

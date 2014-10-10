@@ -35,7 +35,6 @@ xs_model_t* xs_model_from_buf(char* buf)
 
     xs_logd("***************8vec->count=%d", vec->count);
     xs_model_t* model = xs_model_create(vec->count);
-    model->argc = vec->count;
     int i;
     for(i=0; i<model->argc; ++i)
     {

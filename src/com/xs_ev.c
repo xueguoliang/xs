@@ -131,9 +131,12 @@ xs_ev_sock_t* xs_new_sock_ev1(XSOCKET fd, int event, void(*func)(xs_ev_sock_t*),
 {
     xs_ev_t* ev = __xs_malloc(sizeof(xs_ev_t) + sizeof(xs_ev_sock_t), file, line);
     xs_ev_sock_t* sock = XS_SOCK_EV(ev);
+ //   xs_ev_sock_t* sock = (xs_ev_sock_t*)(ev->buf);
 
+    // 初始化xs_ev_t部分
     XS_EV_INIT(ev, XS_EV_SOCK);
 
+    // 初始化具体消息部分
     sock->ev = ev;
 
     sock->fd = fd;
@@ -163,12 +166,12 @@ void __xs_thre_init(xs_thread_t* th, int id)
 {
     XSOCKET fd[2];
     th->mp = xs_mempool_create(th, id, 512000);
-    xs_list_init(&th->node);
-    th->quit = 0;
-    th->fd = 0;
-    xs_list_init(&th->ev_que);
-    xs_list_init(&th->ev_recv);
-    xs_list_init(&th->ev_send);
+    xs_list_init(&th->node);// 线程链表结点，用于主线程中的thre_stop
+    th->quit = 0; // 线程的退出标记
+    th->fd = 0;  // 用于工作线程和主线程通信的socket
+    xs_list_init(&th->ev_que);  // 工作线程的工作队列
+    xs_list_init(&th->ev_recv); // 工作线程的接收任务队列
+    xs_list_init(&th->ev_send); // 工作线程的发送任务队列
 #ifdef WIN32
     if(socketpair(AF_INET, SOCK_STREAM, 0, fd) < 0)
 #else
@@ -181,13 +184,15 @@ void __xs_thre_init(xs_thread_t* th, int id)
     th->fd = fd[0];
 
     th->thev = xs_new_thre_ev(id, fd[1]);
-    xs_ev_add(th->thev->ev);
+    xs_ev_add(th->thev->ev);// 把线程ev加入到epoll
 }
 
 void __xs_thre_wait(xs_thread_t* th)
 {
     char buf = 1;
+    // 发送一个字节的内容，通知主线程，该工作线程没事儿干了
     send(th->fd, &buf, 1, 0);
+    // 阻塞等待主线程的命令
     recv(th->fd, &buf, 1, 0);
 }
 
@@ -341,6 +346,7 @@ int __xs_timer_check()
 {
     xs_heap_t* hp = g_process.timer;
     xs_ev_time_t* time_ev;
+    // 当前时间
     uint64_t now = __xs_timer_now();
 
     while(!xs_heap_empty(hp))
@@ -530,6 +536,7 @@ void __xs_handle_epoll_ev(struct epoll_event* epev, int count)
             /* if not quiting, add socket event to main queue
              * other wise, do not add it, app need use timer to monitor socket */
             if(!xs_ev_quiting())
+                // 把任务缓存到主线程
                 __xs_ev_recv(&g_process.ev_recv1, &ev->node);
         }
         else if(ev->type == XS_EV_THRE)
@@ -563,6 +570,7 @@ int xs_ev_init(int thre_count, void(*quit)())
     memset(g_process.thre, 0, sizeof(xs_thread_t*)*XS_MAX_THRE);
     g_process.thre_count = 0;
     g_process.quit = 0;
+    // 创建定时器堆
     g_process.timer = xs_heap_create(1024, __xs_timer_cmp);
 
     /* start thread */ 
@@ -593,7 +601,7 @@ void __xs_wakeup_stop_thread_with_ev()
     }
 #endif
     xs_list_t* node = g_process.thre_stop.next;
-    while(node != &g_process.thre_stop)
+    while(node != &g_process.thre_stop)// 便利已经停止的线程
     {
         th = xs_entry(node, xs_thread_t, node);
         node = node->next;
@@ -601,8 +609,11 @@ void __xs_wakeup_stop_thread_with_ev()
         /* if the thread has message, start it  */
         if(!xs_list_empty(&th->ev_recv))
         {
+            // 把接收到的任务，转移到工作队列
             xs_list_append(&th->ev_que, &th->ev_recv);
+            // 把线程从STOP线程队列中删除
             xs_list_del(&th->node);
+            // 唤醒线程
             __xs_wakeup(th);
             continue;
         }
@@ -645,6 +656,7 @@ int xs_ev_run()
 
     while(g_process.thre_count)
     {
+        // 得到最近一个定时器超时时刻，距离当前时间的时间间隔，以毫秒为单位
         wait = __xs_timer_check();
 
         __xs_wakeup_stop_thread_with_ev();
@@ -728,8 +740,8 @@ int xs_ev_add1(xs_ev_t* ev, const char* file, int line)
         int ret = 0;
         struct epoll_event epev;
         xs_ev_sock_t* sock = XS_SOCK_EV(ev);
-        epev.data.ptr = sock->ev;
-        epev.events = sock->event;
+        epev.data.ptr = sock->ev;  // ev
+        epev.events = sock->event; // EPOLLIN
 
 
         if(epoll_ctl(g_process.epoll_fd, EPOLL_CTL_MOD, sock->fd, &epev) < 0)
@@ -812,6 +824,7 @@ xs_ev_time_t* xs_ev_add_time_ev(int period, void(*func)(xs_ev_time_t*), void* pt
 xs_ev_sock_t* xs_ev_add_sock_ev1(XSOCKET fd, int event, void(*func)(xs_ev_sock_t*), void* ptr, const char* file, int line)
 {
     xs_ev_sock_t* s = xs_new_sock_ev1(fd, event, func, ptr, file, line);
+    // 把socket加入到epoll
     xs_ev_add1(s->ev, file, line);
     return s;
 }

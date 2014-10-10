@@ -16,8 +16,12 @@ inc_dirs := $(foreach d,$(make_dirs),$(shell find $(d) -type d))
 exc_dirs := $(foreach d,$(make_dirs),$(shell find $(d) | grep ".git"))
 exc_dirs += $(foreach d,$(make_dirs),$(shell find $(d) | grep ".svn"))
 inc_dirs := $(filter-out $(exc_dirs),$(inc_dirs))
+# inc_dirs = src/com src/hello_server/hello_server
 inc_dirs := $(addprefix -I,$(inc_dirs))
+# inc_dirs = -Isrc/com -Isrc/hello_xs/hello_server
+
 CPPFLAGS += $(inc_dirs)
+# CPPFLAGS += -Isrc/com -Isrc/hello_xs/hello_server
 CPPFLAGS += -DXS_AUTO_GEN_FILES
 
 # make all objects
@@ -30,9 +34,11 @@ objs := $(srcs:.c=.o)
 
 # depends
 deps += $(objs:.o=.d)
+
 ifneq ($(MAKECMDGOALS),clean) 
 -include $(deps)
 endif
+# deps = com/xs.d com/xs_ev.d ....
 
 # flags and libs
 LIBS += -lrt -lpthread #-lzlog
@@ -67,7 +73,7 @@ ifeq ($(template),app)
 else
 ifeq ($(template),share)
 #	$(CC) -o $@ $(app_objs)  $(LIBS) $(CPPFLAGS) -L. -lxs
-	$(CC) -o $@ $(app_objs)  $(LIBS) $(CPPFLAGS) 
+	$(CC) -o $@ $^  $(LIBS) $(CPPFLAGS) 
 else
 ifeq ($(template),static)
 #	$(AR) rcs -o $@ $(app_objs) $(LIBS) $(CPPFLAGS) -L. -lxs
@@ -82,6 +88,7 @@ endif
 # for 
 allfiles := $(foreach d,$(make_dirs),$(shell find $(d) -name "*.c" -o -name "*.h" ))
 allfile_deps := $(allfiles)
+allfile_deps := $(filter-out $(allfile_deps),$(appdir)__all_files__.c)
 # sort
 allfiles := $(sort $(allfiles))
 # remove ./
@@ -90,7 +97,6 @@ allfiles := $(subst ./,,$(allfiles))
 allfiles := $(addprefix \",$(allfiles))
 allfiles := $(allfiles:=\",)
 
-allfile_deps := $(filter-out $(allfile_deps),$(appdir)__all_files__.c)
 
 $(appdir)__all_files__.c: $(allfile_deps)
 	@echo '#ifdef __cplusplus' > $@

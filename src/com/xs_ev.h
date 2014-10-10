@@ -23,6 +23,10 @@ extern "C"{
 #ifndef __XSEV_H__
 #define __XSEV_H__
 
+/*
+ * EV模块：负责抽象消息结构体和管理
+ * */
+
 #define XS_EV_NONE 0
 #define XS_EV_FREE 1
 #define XS_EV_SOCK 2
@@ -41,7 +45,7 @@ typedef struct xs_ev_t
 {
     xs_list_t   node;
     int         type;
-    
+    // 占位符
     char        buf[0];
 } xs_ev_t;
 
@@ -109,21 +113,21 @@ typedef struct xs_process_t
 {
     xs_mempool_t*   mp;
     void(*_quit)();
-    xs_list_t       ev_recv1;
+    xs_list_t       ev_recv1; //消息队列，主线程缓存的消息
 
-    xs_list_t       thre_stop;
-    xs_thread_t*    thre[XS_MAX_THRE]; /* position 0 is not used */
+    xs_list_t       thre_stop; // 休息的线程队列，STOP状态的线程
+    xs_thread_t*    thre[XS_MAX_THRE]; /* position 0 is not used 线程状态*/
     int             epoll_fd;
     int16_t         thre_count;
-    int16_t         quit;
-    xs_heap_t*      timer;
+    int16_t         quit;  // 程序退出标记
+    xs_heap_t*      timer; // 定时器堆
 #if XS_EV_TRANS_ALL
 #else
-    int             ev_count;
+    int             ev_count;  // 分配任务数量
 #endif
 } xs_process_t;
 
-extern xs_process_t g_process;
+extern xs_process_t g_process; // 主线程状态数据
 
 int xs_ev_init(int thre_count, void(*quit)());
 int xs_ev_run();

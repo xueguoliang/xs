@@ -33,7 +33,6 @@ extern "C"{
  *
  * */
 
-
 #define xs_atomic_get(ptr) __sync_fetch_and_add(ptr, 0)
 #define xs_atomic_inc(ptr) __sync_fetch_and_add(ptr, 1)
 #define xs_atomic_dec(ptr) __sync_fetch_and_sub(ptr, 1)

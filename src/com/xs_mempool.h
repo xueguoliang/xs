@@ -26,56 +26,63 @@ extern "C"{
 #ifndef __XS_MEMPOOL_H__
 #define __XS_MEMPOOL_H__
 
+// 内存块头部偏移字节数
 #define XS_MEM_HEAD 8
+// 内存块尾部预留字节数
 #define XS_MEM_TAIL 4
+// 最小内存块尺寸
 #define XS_MEMPOOL_MIN_BLOCK_SIZE 32
+//
 #define XS_MEM_EXTRA (XS_MEM_HEAD+XS_MEM_TAIL)
 
+// 内存池开关宏
 #define XS_USE_MEMPOOL
 
 extern pthread_key_t g_thread_key;
 
+// 描述一个内存块的结构体
 typedef struct xs_mempool_block_t
 {
 #define XS_MEMPOOL_HOT  1
 #define XS_MEMPOOL_COOL 0
-    uint16_t        magic;
+    uint16_t        magic;  /* 站 */
     uint16_t        file;    /* file index */
     uint16_t        line;  /* who malloc this memory, index of the thread */
-    uint16_t        thid:12;    /* line */
+    uint16_t        thid:12;    /* thread id */
     uint16_t        index:4;    /* 0000--1111, if 1111, just free */
     
     struct xs_mempool_block_t* next;
 } xs_mempool_block_t;
-
+// 一个内存块
 typedef struct xs_mempool_trunk_t
 {
     struct xs_mempool_trunk_t* next;
     int             size; /* size is 64k 128k 256k 512k or 1M */
     char            buf[];
 } xs_mempool_trunk_t;
-
+// 一个内存池
 typedef struct xs_mempool_t
 {
 #ifdef XS_USE_MEMPOOL
     xs_mempool_trunk_t* trunks;
     xs_mempool_block_t** blocks;
-    int             min_block_index;
-    int             max_block_index;
-    int             min_block_size;
-    int             max_block_size;
+    int             min_block_index;  // 0
+    int             max_block_index;  // 15
+    int             min_block_size;  // 32
+    int             max_block_size; // 512k
     xs_list_t       extra; /* some malloc > max_block_size */
-    uint32_t        use_buff;
+    uint32_t        use_buff;  // 已经申请的内存，统计
 #endif
     /* the thread of the mempool */
-    int             rtid;
-    void*           rtdata;
+    int             rtid;               // 线程编号
+    void*           rtdata;         // 线程结构体
 } xs_mempool_t;
-/* general by Makefile */
+
 xs_mempool_t* xs_mempool_create(void* rtdata, int rtid, int max_alloc_size);
 extern xs_mempool_t* g_mp;
 
 #ifdef XS_USE_MEMPOOL
+/* general by Makefile */
 extern char* g_mem_files[];
 extern int g_mem_file_count;
 void xs_mempool_check_magic(void* ptr);

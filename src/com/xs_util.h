@@ -23,6 +23,15 @@ extern "C"{
 #ifndef __XS_UTIL_H__
 #define __XS_UTIL_H__
 
+// utils
+static inline char* xs_gen_session_name(int n)
+{
+    time_t t = time(NULL);    
+    char buf[128];
+    sprintf(buf, "%lld.%d", (long long int)t, n);
+    return xs_strdup(buf);
+}
+
 static inline int xs_power2(int x)
 {
     if(x < 0)

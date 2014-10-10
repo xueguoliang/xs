@@ -56,7 +56,7 @@ void __xs_aio_recv_data(xs_ev_sock_t* sev)
             xs_ev_add(sev->ev);
             return ;
         }
-        else
+        else // ret == 0 or (ret< 0 &&  errno!=EAGAIN)
         {
             xs_logd("here ret=%d", ret);
             aio->ret = ret;
@@ -65,8 +65,10 @@ void __xs_aio_recv_data(xs_ev_sock_t* sev)
         }
     }
 
-    ret = read(sev->fd, aio->buf + (aio->iolen - 4),
-            aio->buflen - (aio->iolen - 4));
+    int alreadyRecv = aio->iolen - 4;
+
+    ret = read(sev->fd, aio->buf + alreadyRecv,
+            aio->buflen - alreadyRecv);
     if(ret > 0)
     {
         aio->iolen += ret;

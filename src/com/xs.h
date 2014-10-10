@@ -27,13 +27,13 @@ extern "C"{
 
 #include "xs_net.h"
 #include "xs_def.h"
-#include "xs_util.h"
 #include "xs_log.h"
 #include "xs_base64.h"
 #include "xs_atomic.h"
 #include "xs_list.h"
 #include "xs_mempool.h"
 #include "xs_malloc.h"
+#include "xs_util.h"
 #include "xs_heap.h"
 #include "xs_sort.h"
 #include "xs_rbtree.h"
@@ -57,11 +57,12 @@ extern "C"{
 #include "xs_md5.h"
 #include "xs_clis.h"
 
+
+/* XS库初始化函数，xs_init是初始化主线程运行环境的，用于客户端
+ * 服务器的初始化应该用xs_server_init */
 void xs_init();
 void xs_fini();
 
-// utils
-char* xs_gen_session_name(int n);
 
 #endif
 

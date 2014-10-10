@@ -106,8 +106,9 @@ void xs_server_init(int thread_count, void(*quit)(), int argc, char* argv[])
 #else
     signal(SIGPIPE, SIG_IGN);
 #endif
-    argc = argc;
+    argc = argc; // 忽略warning
     argv = argv;
+
     if(quit == NULL) quit = xs_fini;
 
     xs_init();
@@ -156,6 +157,7 @@ xs_ev_sock_t* xs_server_start_tcp(uint16_t port, int buf, void(*func)(xs_ev_sock
     }
     xs_sock_listen(fd, buf);
     xs_logi("server listen %d, sock=%d", port, fd);
+    // 把socket加入到epoll
     return xs_ev_add_sock_ev(fd, EPOLLIN, func, ptr);
 }
 

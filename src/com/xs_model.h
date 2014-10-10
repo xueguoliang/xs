@@ -62,7 +62,7 @@ void xs_model_send_and_close(int fd, xs_model_t* model);
 static inline xs_model_t* xs_model_create(int argc)
 {
     xs_model_t* model = (xs_model_t*)xs_malloc(sizeof(model->argc)+sizeof(char*)*argc);
-    memset(model, 0, sizeof(int)+sizeof(char*)*argc);
+    memset(model, 0, sizeof(model->argc)+sizeof(char*)*argc);
     model->argc = argc;
     return model;
 }
