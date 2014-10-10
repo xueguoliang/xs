@@ -1,0 +1,105 @@
+-- MySQL dump 10.13  Distrib 5.5.38, for debian-linux-gnu (x86_64)
+--
+-- Host: localhost    Database: qq
+-- ------------------------------------------------------
+-- Server version	5.5.38-0ubuntu0.14.04.1
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `qqchat`
+--
+
+DROP TABLE IF EXISTS `qqchat`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qqchat` (
+  `f0` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'auto increment id',
+  `f1` varchar(32) NOT NULL COMMENT 'sender',
+  `f2` varchar(32) NOT NULL COMMENT 'recver',
+  `f3` varchar(1024) NOT NULL COMMENT 'content',
+  PRIMARY KEY (`f0`)
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=latin1 COMMENT='chat record';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `qqchat`
+--
+
+LOCK TABLES `qqchat` WRITE;
+/*!40000 ALTER TABLE `qqchat` DISABLE KEYS */;
+/*!40000 ALTER TABLE `qqchat` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `qqfriend`
+--
+
+DROP TABLE IF EXISTS `qqfriend`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qqfriend` (
+  `f0` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'auto increment id',
+  `f1` varchar(32) NOT NULL COMMENT 'my username',
+  `f2` varchar(32) NOT NULL COMMENT 'friend username',
+  PRIMARY KEY (`f0`),
+  UNIQUE KEY `f1` (`f1`,`f2`)
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=latin1 COMMENT='friend';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `qqfriend`
+--
+
+LOCK TABLES `qqfriend` WRITE;
+/*!40000 ALTER TABLE `qqfriend` DISABLE KEYS */;
+INSERT INTO `qqfriend` VALUES (14,'aa','cc'),(16,'aa','dd'),(18,'aa','ee'),(15,'cc','aa'),(17,'dd','aa'),(19,'ee','aa');
+/*!40000 ALTER TABLE `qqfriend` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `qquser`
+--
+
+DROP TABLE IF EXISTS `qquser`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qquser` (
+  `f0` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'auto increment id',
+  `f1` varchar(32) NOT NULL COMMENT 'username',
+  `f2` varchar(32) NOT NULL COMMENT 'password',
+  `f3` int(11) NOT NULL DEFAULT '0' COMMENT 'status: 1 online, 0 offline',
+  PRIMARY KEY (`f0`),
+  UNIQUE KEY `f1` (`f1`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1 COMMENT='user table';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `qquser`
+--
+
+LOCK TABLES `qquser` WRITE;
+/*!40000 ALTER TABLE `qquser` DISABLE KEYS */;
+INSERT INTO `qquser` VALUES (2,'aa','1e56aff73ad0316f01653b1c6616c493',0),(4,'cc','a17e4360196e2f25e4cda6d363a62007',0),(6,'dd','49c0e86f5a9e575520044e1212df3594',0),(7,'ee','44c84c0e5a1d3ad668cb39bf6ed7b1b6',0),(8,'ff','8847c2e59a0aec60115ce391f05c858d',0);
+/*!40000 ALTER TABLE `qquser` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2014-10-11  0:29:21
