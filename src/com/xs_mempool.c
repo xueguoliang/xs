@@ -285,7 +285,7 @@ xs_mempool_block_t* __xs_mempool_alloc_block(xs_mempool_t* mem_pool, int index, 
          XS_MEM_SET_TAIL_MAGIC(half, size);
 
          half->next = mem_pool->blocks[index];
-         mem_pool->blocks[index] = half->next;
+         mem_pool->blocks[index] = half;
 
          block->index = index;
          XS_MEM_SET_TAIL_MAGIC(block, size);
