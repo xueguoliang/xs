@@ -1,8 +1,8 @@
 
 all:
-	cd src && make || exit "$$?"
+	cd src2 && make || exit "$$?"
 
 .PHONY: clean install
 clean:
-	cd src && make clean
+	cd src2 && make clean
 
