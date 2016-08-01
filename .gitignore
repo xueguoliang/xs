@@ -1,6 +1,7 @@
 *.d
 *.so
 *.o
+*.a
 *.bin
 .vimtagsdisplay
 tags
