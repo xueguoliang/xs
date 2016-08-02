@@ -19,7 +19,7 @@ all:
 all: $(target)
 
 $(target): $(obj)
-	$(AR) rcs -o $@ $^ $(LIBS) $(CPPFLAGS) $(CFLAGS)
+	$(AR) rcs -o $@ $^ $(LIBS) $(CFLAGS)
 
 .PHONY: clean install uninstall
 
