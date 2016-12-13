@@ -1,3 +1,3 @@
 
-QT := yes
+QT := no
 #QT := no

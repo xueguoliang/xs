@@ -73,7 +73,7 @@ typedef struct xs_ev_time_t
 
 typedef struct xs_ev_thre_t
 {
-    int         thid;
+    int         thid; // 0~4096 int
     int         fd;
     xs_ev_t*    ev;
 } xs_ev_thre_t;

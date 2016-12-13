@@ -697,6 +697,7 @@ int xs_ev_run()
     return 0;
 }
 
+// add thread to xs
 int xs_ev_add_thre()
 {
     xs_mempool_t* mp = pthread_getspecific(g_thread_key);

@@ -16,22 +16,26 @@ void myrecv(xs_ev_sock_t* sock)
 
     if(errno == EAGAIN)
     {
+        // 重新把socket加入到epoll
         xs_ev_add(sock->ev);
     }
     else
     {
+        // 关闭socket，如果有错误，则关闭socket
         xs_sock_close(sock);
     }
 }
 
 void myaccept(xs_ev_sock_t* sock)
 {
+    // 一次性接收所有的连接
     while(1)
     {
         int fd = accept(sock->fd, NULL, NULL);
         if(fd < 0)
             break;
 
+        // 放入epoll集合中 
         xs_ev_add_sock_ev(fd,  EPOLLIN, myrecv, NULL);
     }
     if(errno == EAGAIN)
