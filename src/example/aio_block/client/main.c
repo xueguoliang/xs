@@ -12,7 +12,7 @@ int main()
 
     getchar();
 
-    sleep(10000);
+    sleep(1);
 
     close(fd);
     return 0;
